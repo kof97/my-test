@@ -8,7 +8,3 @@ $curl = new Curl();
 $a = $curl->get('http://www.microsoft.com/zh-hk/');
 
 echo $a;
-
-
-
-

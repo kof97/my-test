@@ -2,21 +2,17 @@
 
 function huiwen($str)
 {
-	$arr1 = str_split($str);
-	$arr2 = array_reverse($arr1);
-
-	$str2 = implode($arr2, "");
-
+	$str2 = implode(array_reverse(str_split($str)), "");
+	
 	if ($str == $str2) {
 		echo "$str, yes";
 	} else {
 		echo "$str, no";
 	}
-
 }
 
 
-//huiwen("3211023");
+huiwen("321123");
 
 
 function palindrome($str)
@@ -68,21 +64,30 @@ function palindromeUp($str)
 
 function palindromeUp2($str)
 {	
+	// 最大回文序列中间坐标
 	$pos = 0;
+	// 最大回文长度
 	$max = 0;
+	// 回文序列最右边界坐标
+	$mx = 0;
+
+	$p = array("0" => 1, "1" => 1);
 
 	$newStr = "@#" . implode(str_split($str), "#") . "#\0";
 	$n = strlen($newStr);
 
 	for ($i = 2; $newStr[$i] != "\0"; $i++) {
-		$j = 1; 
-		while ($newStr[$i - $j] == $newStr[$i + $j]) {
-			$j++;
+		// $i 相对于最大回文序列中间坐标 $pos 的对称点
+		$j = $pos - $i > 0 ? $pos - $i : 1;
+		$p[$i] = $mx > $i ? min($p[$j], $mx - $i) : 1; 
+		while ($newStr[$i - $p[$i]] == $newStr[$i + $p[$i]]) {
+			$p[$i]++;
 		}
 
-		if ($j > $max) {
-			$max = $j;
+		if ($p[$i] > $max) {
+			$max = $p[$i];
 			$pos = $i;
+			$mx = $i + $max;
 		}
 	}
 
@@ -93,7 +98,7 @@ function palindromeUp2($str)
 
 }
 
-palindromeUp2("123321132112asdfdsa11444411121");
+palindromeUp2("123321132112asdfdsa1144121");
 
 function manacher($str)
 {

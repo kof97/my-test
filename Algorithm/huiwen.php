@@ -3,7 +3,7 @@
 function huiwen($str)
 {
 	$str2 = implode(array_reverse(str_split($str)), "");
-	
+
 	if ($str == $str2) {
 		echo "$str, yes";
 	} else {
@@ -94,8 +94,6 @@ function palindromeUp2($str)
 	$r = substr($newStr, $pos - $max + 1, $max * 2 - 1);
 	$res = str_replace(array("#", "@", "\0"), "", $r);
 	var_dump($res);
-
-
 }
 
 palindromeUp2("123321132112asdfdsa1144121");

@@ -1,41 +1,27 @@
 <?php 
 
-function httpcopy($url, $file="", $timeout=60) {
-    $file = empty($file) ? pathinfo($url,PATHINFO_BASENAME) : $file;
-    $dir = pathinfo($file,PATHINFO_DIRNAME);
-    !is_dir($dir) && @mkdir($dir,0755,true);
-    $url = str_replace(" ","%20",$url);
+$opts = array(
+    'http' => array(
+        'method' => "GET",
+        'header' => "Accept-Language:zh-CN,zh;q=0.8\r\n" .
+                    "Accept:application/json, text/javascript, */*; q=0.01\r\n" . 
+                    "Host: www.bilibili.com\r\n" . 
+                    "Referer: http://www.bilibili.com/ranking\r\n" . 
+                    "Origin: www.bilibili.com\r\n" . 
+                
+                    //"Cookie: foo=bar\r\n" . 
+                    "X-Requested-With:XMLHttpRequest\r\n"
+    )
+);
 
-    if(function_exists('curl_init')) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        $temp = curl_exec($ch);
-        if(@file_put_contents($file, $temp) && !curl_error($ch)) {
-            return $file;
-        } else {
-            return false;
-        }
-    } else {
-        $opts = array(
-            "http"=>array(
-            "method"=>"GET",
-            "header"=>"",
-            "timeout"=>$timeout)
-        );
-        $context = stream_context_create($opts);
-        if(@copy($url, $file, $context)) {
-            //$http_response_header
-            return $file;
-        } else {
-            return false;
-        }
-    }
-}
+$context = stream_context_create($opts);
 
-$filepath = "http://www.bilibili.com/index/rank/";
-$filename = "all-3-0.json";
-$url = $filepath . $filename; 
+// Open the file using the HTTP headers set above
+$file = file_get_contents('http://www.bilibili.com/index/rank/all-1-0.json', false, $context);
 
-httpcopy($url, "F:\myphp\Apache24\www\\000\acfun-spider\\" . $filename);
+
+
+
+echo $file;
+
+

@@ -41,7 +41,6 @@ function palindromeUp($str)
 	$pos = 0;
 	$max = 0;
 
-
 	$newStr = "#" . implode(str_split($str), "#") . "#";
 	$n = strlen($newStr);
 

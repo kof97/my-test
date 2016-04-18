@@ -10,7 +10,41 @@ function huiwen($str)
 		echo "$str, no";
 	}
 }
+function palindromeUp2($str)
+{	
+	// 最大回文序列中间坐标
+	$pos = 0;
+	// 最大回文长度
+	$max = 0;
+	// 回文序列最右边界坐标
+	$mx = 0;
 
+	$p = array("0" => 1, "1" => 1);
+
+	$newStr = "@#" . implode(str_split($str), "#") . "#\0";
+	$n = strlen($newStr);
+
+	for ($i = 2; $newStr[$i] != "\0"; $i++) {
+		// $i 相对于最大回文序列中间坐标 $pos 的对称点
+		$j = $pos - $i > 0 ? $pos - $i : 1;
+		$p[$i] = $mx > $i ? min($p[$j], $mx - $i) : 1; 
+		while ($newStr[$i - $p[$i]] == $newStr[$i + $p[$i]]) {
+			$p[$i]++;
+		}
+
+		if ($p[$i] > $max) {
+			$max = $p[$i];
+			$pos = $i;
+			$mx = $i + $max;
+		}
+	}
+
+	$r = substr($newStr, $pos - $max + 1, $max * 2 - 1);
+	$res = str_replace(array("#", "@", "\0"), "", $r);
+	var_dump($res);
+}
+// $str2 = implode(array_reverse(str_split($str)), "");
+palindromeUp2("123321132112asdfdsa1144121");
 
 huiwen("321123");
 
@@ -61,41 +95,7 @@ function palindromeUp($str)
 	var_dump($res);
 }
 
-function palindromeUp2($str)
-{	
-	// 最大回文序列中间坐标
-	$pos = 0;
-	// 最大回文长度
-	$max = 0;
-	// 回文序列最右边界坐标
-	$mx = 0;
 
-	$p = array("0" => 1, "1" => 1);
-
-	$newStr = "@#" . implode(str_split($str), "#") . "#\0";
-	$n = strlen($newStr);
-
-	for ($i = 2; $newStr[$i] != "\0"; $i++) {
-		// $i 相对于最大回文序列中间坐标 $pos 的对称点
-		$j = $pos - $i > 0 ? $pos - $i : 1;
-		$p[$i] = $mx > $i ? min($p[$j], $mx - $i) : 1; 
-		while ($newStr[$i - $p[$i]] == $newStr[$i + $p[$i]]) {
-			$p[$i]++;
-		}
-
-		if ($p[$i] > $max) {
-			$max = $p[$i];
-			$pos = $i;
-			$mx = $i + $max;
-		}
-	}
-
-	$r = substr($newStr, $pos - $max + 1, $max * 2 - 1);
-	$res = str_replace(array("#", "@", "\0"), "", $r);
-	var_dump($res);
-}
-
-palindromeUp2("123321132112asdfdsa1144121");
 
 function manacher($str)
 {
